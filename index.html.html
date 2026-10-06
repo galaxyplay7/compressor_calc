@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starting Air Compressor Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* bg-gray-100 */
+        }
+        .math-font {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden border border-gray-100">
+        
+        <!-- Header Section -->
+        <div class="bg-blue-600 text-white p-6">
+            <h1 class="text-2xl font-bold mb-2">Starting Air Compressor Calculator</h1>
+            <p class="text-blue-100 text-sm">Menghitung kapasitas minimum kompresor udara yang dibutuhkan.</p>
+        </div>
+
+        <!-- Formula Display Section -->
+        <div class="bg-blue-50 border-b border-blue-100 p-6 flex flex-col items-center justify-center">
+            <span class="text-xs text-gray-500 uppercase font-semibold tracking-wider mb-2">Rumus Perhitungan</span>
+            <div class="math-font text-2xl text-gray-800 flex items-center">
+                <span>Q = </span>
+                <div class="flex flex-col mx-2 text-center">
+                    <span class="border-b border-gray-800 px-2">V<sub>st</sub> &times; n<sub>eng</sub> &times; n<sub>st</sub></span>
+                    <span>T</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Form Section -->
+        <div class="p-6">
+            <form id="calculatorForm" class="space-y-4">
+                
+                <!-- Input: Vst -->
+                <div>
+                    <label for="vst" class="block text-sm font-medium text-gray-700 mb-1">
+                        V<sub class="math-font">st</sub> (Starting Air Consumption)
+                    </label>
+                    <div class="relative">
+                        <input type="number" id="vst" step="any" min="0" required
+                            class="w-full pl-3 pr-16 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            placeholder="Contoh: 5.5">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-500">
+                            Nm&sup3;
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-1">Konsumsi udara per start</p>
+                </div>
+
+                <!-- Input: n_eng -->
+                <div>
+                    <label for="neng" class="block text-sm font-medium text-gray-700 mb-1">
+                        n<sub class="math-font">eng</sub> (Number of Engines)
+                    </label>
+                    <div class="relative">
+                        <input type="number" id="neng" step="1" min="1" required
+                            class="w-full pl-3 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            placeholder="Contoh: 3">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-500">
+                            EA
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input: n_st -->
+                <div>
+                    <label for="nst" class="block text-sm font-medium text-gray-700 mb-1">
+                        n<sub class="math-font">st</sub> (Number of Starts)
+                    </label>
+                    <div class="relative">
+                        <input type="number" id="nst" step="1" min="1" required
+                            class="w-full pl-3 pr-16 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            placeholder="Contoh: 3">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-500">
+                            Starts
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input: T -->
+                <div>
+                    <label for="time" class="block text-sm font-medium text-gray-700 mb-1">
+                        T (Charging Time)
+                    </label>
+                    <div class="relative">
+                        <input type="number" id="time" step="any" min="0.01" required
+                            class="w-full pl-3 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            placeholder="Contoh: 1.5">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-500">
+                            hr
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-1">Waktu pengisian kompresor</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3 pt-4">
+                    <button type="button" id="calcBtn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Hitung Kapasitas
+                    </button>
+                    <button type="button" id="resetBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2.5 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+                        Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Result Section -->
+        <div id="resultContainer" class="hidden bg-gray-50 border-t border-gray-200 p-6">
+            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3 text-center">Hasil Perhitungan</h3>
+            
+            <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                <div class="flex justify-between items-end mb-2">
+                    <span class="text-gray-600 font-medium">Kapasitas yang Dibutuhkan (Q)</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span id="resultValue" class="text-4xl font-bold text-blue-700">0</span>
+                    <span class="text-gray-500 font-medium">Nm&sup3;/hr</span>
+                </div>
+                
+                <!-- Detailed breakdown -->
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <p class="text-sm text-gray-500 mb-1">Total Volume Udara = <span id="totalVolumeVal" class="font-semibold text-gray-700">0</span> Nm&sup3;</p>
+                    <p class="text-xs text-gray-400">Total volume dihitung dari: V<sub>st</sub> &times; n<sub>eng</sub> &times; n<sub>st</sub></p>
+                </div>
+            </div>
+            
+            <button id="copyBtn" class="mt-4 w-full flex items-center justify-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span id="copyText">Salin Hasil</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('calculatorForm');
+            const vstInput = document.getElementById('vst');
+            const nengInput = document.getElementById('neng');
+            const nstInput = document.getElementById('nst');
+            const timeInput = document.getElementById('time');
+            
+            const calcBtn = document.getElementById('calcBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const copyText = document.getElementById('copyText');
+            
+            const resultContainer = document.getElementById('resultContainer');
+            const resultValue = document.getElementById('resultValue');
+            const totalVolumeVal = document.getElementById('totalVolumeVal');
+
+            // Format number to local string with max 2 decimals, removing trailing zeros
+            const formatNumber = (num) => {
+                // Handle cases where parsing might result in very long floats
+                const rounded = Math.round((num + Number.EPSILON) * 100) / 100; 
+                return rounded.toString().replace('.', ',');
+            };
+
+            const calculateCapacity = () => {
+                // Check if all fields are filled and valid
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                // Parse input values (replace comma with dot if user typed it)
+                const vst = parseFloat(vstInput.value.replace(',', '.'));
+                const neng = parseInt(nengInput.value, 10);
+                const nst = parseInt(nstInput.value, 10);
+                const t = parseFloat(timeInput.value.replace(',', '.'));
+
+                if (isNaN(vst) || isNaN(neng) || isNaN(nst) || isNaN(t) || t <= 0) {
+                    alert("Mohon masukkan angka yang valid."); // Minimal fallback, HTML5 validation usually catches this first
+                    return;
+                }
+
+                // The Formula: Total Volume
+                const totalVolume = vst * neng * nst;
+                
+                // The Formula: Q = Total Volume / T
+                const q = totalVolume / t;
+
+                // Update UI
+                totalVolumeVal.textContent = formatNumber(totalVolume);
+                resultValue.textContent = formatNumber(q);
+                
+                // Show result container
+                resultContainer.classList.remove('hidden');
+                
+                // Reset copy button state
+                copyBtn.classList.remove('text-green-600', 'border-green-300', 'bg-green-50');
+                copyText.textContent = 'Salin Hasil';
+                
+                // Scroll to result on smaller screens
+                setTimeout(() => {
+                    resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            };
+
+            // Event Listeners
+            calcBtn.addEventListener('click', calculateCapacity);
+            
+            // Allow calculating by pressing Enter in any input
+            form.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Prevent default form submission
+                    calculateCapacity();
+                }
+            });
+
+            resetBtn.addEventListener('click', () => {
+                form.reset();
+                resultContainer.classList.add('hidden');
+                vstInput.focus();
+            });
+
+            copyBtn.addEventListener('click', () => {
+                const qValue = resultValue.textContent;
+                const textToCopy = `Kapasitas Starting Air Compressor (Q) = ${qValue} Nm³/hr`;
+                
+                // Ensure we handle iframe environments gracefully using execCommand fallback if needed
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(textToCopy).then(showCopiedState);
+                } else {
+                    // Fallback for older browsers or non-secure contexts (like some iframes)
+                    const textArea = document.createElement("textarea");
+                    textArea.value = textToCopy;
+                    textArea.style.position = "fixed";
+                    textArea.style.left = "-999999px";
+                    textArea.style.top = "-999999px";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        showCopiedState();
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                    }
+                    textArea.remove();
+                }
+            });
+
+            function showCopiedState() {
+                copyText.textContent = 'Tersalin!';
+                copyBtn.classList.add('text-green-600', 'border-green-300', 'bg-green-50');
+                
+                setTimeout(() => {
+                    copyText.textContent = 'Salin Hasil';
+                    copyBtn.classList.remove('text-green-600', 'border-green-300', 'bg-green-50');
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
